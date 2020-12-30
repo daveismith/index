@@ -22,11 +22,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run ERC
-      run: kibot -d output -s run_erc -i
-
-    - name: Run DRC
-      run: kibot -d output -s run_erc -i
+    - name: Run KiBot
+      run: cd pnp/pcb/mobo && kibot -c ../../../config.kibot.yaml -d output -i
 
     - name: upload results
       uses: actions/upload-artifact@v2
