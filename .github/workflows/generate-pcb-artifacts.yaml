@@ -20,7 +20,11 @@ jobs:
     container: setsoft/kicad_auto:latest
       
     steps:
+    - name: Checkout
     - uses: actions/checkout@v2
+
+    - name: Output
+    - uses: INTI-CMNB/KiBot@v0.7.0
       with:
       # Required - kibot config file
         config: config.kibot.yaml
