@@ -313,6 +313,7 @@ F 0 "U1" H 3950 4200 50  0000 C CNN
 F 1 "STM32F407VETx" H 3950 4400 50  0000 C CNN
 F 2 "Package_QFP:LQFP-100_14x14mm_P0.5mm" H 3250 1800 50  0001 R CNN
 F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00037051.pdf" H 3950 4400 50  0001 C CNN
+F 4 "C28730" H 3950 4400 50  0001 C CNN "LCSC Part"
 	1    3950 4400
 	1    0    0    -1  
 $EndComp
