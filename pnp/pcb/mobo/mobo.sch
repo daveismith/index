@@ -135,10 +135,6 @@ Text GLabel 4850 6600 2    50   Input ~ 0
 Y_DIR
 Text GLabel 3050 5400 0    50   Input ~ 0
 Y_STEP
-Text GLabel 4850 5700 2    50   Input ~ 0
-ANALOG2
-Text GLabel 4850 5600 2    50   Input ~ 0
-ANALOG1
 Text GLabel 4850 5500 2    50   Input ~ 0
 VAC1_SIG
 Text GLabel 3050 5600 0    50   Input ~ 0
@@ -958,6 +954,31 @@ F 1 "RESET" H 1800 1444 50  0000 C CNN
 F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 1800 1450 50  0001 C CNN
 F 3 "" H 1800 1450 50  0001 C CNN
 	1    1800 1250
+	1    0    0    -1  
+$EndComp
+NoConn ~ 4850 2400
+NoConn ~ 4850 3500
+NoConn ~ 4850 4900
+NoConn ~ 4850 5600
+NoConn ~ 4850 5700
+NoConn ~ 4850 6300
+NoConn ~ 4850 6400
+NoConn ~ 4850 6500
+NoConn ~ 4850 6800
+NoConn ~ 4850 6900
+NoConn ~ 3050 6500
+NoConn ~ 3050 6400
+NoConn ~ 3050 5200
+NoConn ~ 3050 4400
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 5FF1360C
+P 5775 1375
+F 0 "#FLG0101" H 5775 1450 50  0001 C CNN
+F 1 "PWR_FLAG" H 5775 1548 50  0000 C CNN
+F 2 "" H 5775 1375 50  0001 C CNN
+F 3 "~" H 5775 1375 50  0001 C CNN
+	1    5775 1375
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

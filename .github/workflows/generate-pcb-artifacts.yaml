@@ -20,13 +20,26 @@ jobs:
     container: setsoft/kicad_auto:latest
       
     steps:
-    - uses: actions/checkout@v2
+    - name: Update system repositories
+      run:  apt update
 
-    - name: Run KiBot
-      run: cd pnp/pcb/mobo && kibot -c ../../../config.kibot.yaml -d output -i
+    - name: Install Required Libraries
+      run: apt -y install zip
+
+      #    - name: Install Kicad 3D library
+      #      run:  apt -y install kicad-packages3d
+      
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Run MOBO KiBot
+      run: cd pnp/pcb/mobo && kibot -c config.kibot.yaml -d output
+
+    - name: Compress MOBO Gerbers For PCB Fab
+      run: cd pnp/pcb/mobo/output/gerbers && zip -r -j ../gerbers.zip *
 
     - name: upload results
       uses: actions/upload-artifact@v2
       with:
-        name: output
-        path: output
+        name: mobo_output
+        path: pnp/pcb/mobo/output
