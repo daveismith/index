@@ -24,7 +24,7 @@ jobs:
       run:  apt update
 
     - name: Install Required Libraries
-      run: apt -y install zip
+      run: apt -y install zip librsvg2-bin imagemagick
 
       #    - name: Install Kicad 3D library
       #      run:  apt -y install kicad-packages3d

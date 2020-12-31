@@ -1,6 +1,34 @@
 # Example KiPlot config file
-kiplot:
+kibot:
   version: 1
+
+filters:
+  - name: only_jlc_parts
+    comment: 'Only parts with JLC code'
+    type: 'generic'
+    include_only:
+      - column: 'JLCPCB'
+        regex: '^C\d+'
+          #  - name: fix_rotation
+          #    comment: 'Adjust rotation for JLC'
+          #    type: rot_footprint
+          #    rotations:
+          #      - ["^QFN-", 90.0]
+          #      - ["^SOIC-", 90.0]
+
+global:
+  variant: default
+
+variants:
+  - name: default
+    comment: 'Just a place holder for the rotation filter'
+    type: kibom
+    variant: default
+      #  - name: jlcpcb
+      #    comment: 'JLCPCB requires some rotational transforms'
+      #    type: kibom
+      #    variant: jlcpcb
+      #    pre_transform: fix_rotation
 
 preflight:
   # Disable ERC for now while GPereira updates these items.
@@ -11,16 +39,7 @@ preflight:
   check_zone_fills: true
   ignore_unconnected: false
 
-filters:
-  - name: only_jlc_parts
-    comment: 'Only parts with JLC code'
-    type: generic
-    include_only:
-      - column: Field4
-        regex: '^C\d+'
-
 outputs:
-
   - name: 'ibom'
     comment: 'Interactive Bill of Materials'
     type: ibom
@@ -28,13 +47,23 @@ outputs:
 
   - name: 'bom'
     comment: 'Bill of Materials'
-    type: 'bom'
+    type: bom
     dir: .
     options:
       csv:
-        hide_pcb_jnfo: true
+        hide_pcb_info: true
         hide_stats_info: true
       format: CSV
+
+  - name: 'html_bom'
+    comment: 'HTML BOM'
+    type: bom
+    dir: .
+    options:
+      html:
+        datasheet_as_link: Datasheet
+        digikey_link: Digikey
+        title: 'Index MOBO Bill of Materials'
 
   - name: 'print_sch'
     comment: "Print schematic (PDF)"
@@ -74,7 +103,6 @@ outputs:
       plot_footprint_values: true
       force_plot_invisible_refs_vals: false
       tent_vias: true
-      check_zone_fills: true
 
       # gerber options
       line_width: 0.1
@@ -113,6 +141,21 @@ outputs:
       metric_units: false
       pth_and_npth_single_file: true
 
+  - name: board_top
+    comment: "Top layer view"
+    type: pcbdraw
+    dir: .
+    options:
+      format: png
+
+  - name: board_bottom
+    comment: "Bottom layer view"
+    type: pcbdraw
+    dir: .
+    options:
+      format: png
+      bottom: true
+
   - name: 'pick_and_place_file'
     comment: 'Pick and Place Location File'
     type: position
@@ -120,25 +163,26 @@ outputs:
     options:
       format: CSV
 
-        #  - name: 'bom'
-        #    comment: "BoM for JLC"
-        #    type: bom
-        #    options:
-        #      output: '%f_%i_jlc.%x'
-        #      exclude_filter: 'only_jlc_parts'
-        #      ref_separator: ','
-        #      columns:
-        #        - field: Value
-        #          name: Comment
-        #        - field: References
-        #          name: Designator
-        #        - Footprint
-        #        - field: Field4
-        #          name: 'LCSC Part #'
-        #      csv:
-        #        hide_pcb_info: true
-        #        hide_stats_info: true
-        #        quote_all: true
+  - name: 'bom_jlc'
+    comment: "BoM for JLC"
+    type: bom
+    options:
+      output: '%f_bom_jlc.%x'
+        #exclude_filter: only_jlc_parts
+      ref_separator: ','
+      columns:
+        - field: Value
+          name: Comment
+        - field: References
+          name: Designator
+        - field: Footprint
+          name: Footprint
+        - field: JLCPCB
+          name: 'LCSC Part #'
+      csv:
+        hide_pcb_info: true
+        hide_stats_info: true
+        quote_all: true
 
   - name: 'pick_and_place_jlc'
     comment: 'Pick and place file, JLC style'
@@ -149,19 +193,18 @@ outputs:
       units: millimeters
       separate_files_for_front_and_back: false
       only_smd: true
+        #      variant: jlcpcb
       columns:
         - id: Ref
           name: Designator
-        - Val
-        - Package
         - id: PosX
           name: "Mid X"
         - id: PosY
           name: "Mid Y"
-        - id: Rot
-          name: Rotation
         - id: Side
           name: Layer
+        - id: Rot
+          name: Rotation
 
   - name: 'step_file'
     comment: 'STEP file generation'
