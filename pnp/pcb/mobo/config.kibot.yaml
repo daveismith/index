@@ -13,8 +13,8 @@ filters:
     comment: 'Adjust rotation for JLC'
     type: rot_footprint
     rotations:
-      - ["^TI_SO-", 90.0]
-      - ["^SO-", 90.0]
+      - ["^TI_SO-", 270.0]
+      - ["^SO-", 270.0]
 
 global:
   variant: default
