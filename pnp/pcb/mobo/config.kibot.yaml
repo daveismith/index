@@ -12,9 +12,9 @@ filters:
   - name: fix_rotation
     comment: 'Adjust rotation for JLC'
     type: rot_footprint
-    rotations:
-      - ["^QFN-", 90.0]
-      - ["^SOIC-", 90.0]
+      #    rotations:
+      #      - ["^QFN-", 90.0]
+      #      - ["^SOIC-", 90.0]
 
 global:
   variant: default
@@ -168,7 +168,7 @@ outputs:
     type: bom
     options:
       output: '%f_bom_jlc.%x'
-      exclude_filter: only_jlc_parts
+        # exclude_filter: only_jlc_parts
       ref_separator: ','
       columns:
         - field: Value
