@@ -29,14 +29,30 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Run MOBO KiBot
-      run: cd pnp/pcb/mobo && kibot -c config.kibot.yaml -d output
+    - name: Run mobo KiBot
+      run: cd pnp/pcb/mobo && kibot -c ../../../config.kibot.yaml -d output
 
-    - name: Compress MOBO Gerbers For PCB Fab
-      run: cd pnp/pcb/mobo/output/gerbers && zip -r -j ../gerbers.zip *
+    - name: Compress mobo Gerbers for PCB Fab
+      run: cd pnp/pcb/mobo/output/gerbers && zip -r -j ../pnp_mobo_gerbers.zip *
 
-    - name: upload results
+    - name: upload mobo artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: mobo_output
-        path: pnp/pcb/mobo/output
+        name: pnp_mobo_output
+        path: pnp/pcb/mobo/output        
+
+    - name: Run ringLight KiBot
+      run: cd pnp/pcb/ringLight && kibot -c ../../../config.kibot.yaml -d output
+
+    - name: Compress ringLight Gerbers for PCB Fab
+      run: cd pnp/pcb/ringLight/output/gerbers && zip -r -j ../pnp_ringLight_gerbers.zip *
+
+    - name: upload ringLight results
+      uses: actions/upload-artifact@v2
+      with:
+        name: pnp_ringLight_output
+        path: pnp/pcb/ringLight/output
+
+    # Build The Outputs For feeder_feederFloor
+    # Build The Outputs for feeder_indexingWheel
+    # Build The Outputs for feeder_mobo
