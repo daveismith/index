@@ -12,9 +12,9 @@ filters:
   - name: fix_rotation
     comment: 'Adjust rotation for JLC'
     type: rot_footprint
-      #    rotations:
-      #      - ["^QFN-", 90.0]
-      #      - ["^SOIC-", 90.0]
+    rotations:
+      - ["^HSOP-", 90.0]
+      - ["^SOP-", 90.0]
 
 global:
   variant: default
