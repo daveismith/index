@@ -31,41 +31,61 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          mobo:
+            - 'feeder/pcb/mobo/**'
+          feederFloor:
+            - 'feeder/pcb/feederFloor/**'
+          indexingWheel:
+            - 'feeder/pcb/indexingWheel/**'
+          config:
+            - '.github/workflows/generate-feeder-pcb-artifacts.yaml'
+            - '**.kiboy.yaml'
+
     - name: Run feeder mobo KiBot
+      if: steps.filter.outputs.mobo == 'true' || steps.filter.outputs.config == 'true'
       run: cd feeder/pcb/mobo && kibot -c ../../../config.kibot.yaml -d export
 
     - name: Compress feeder mobo Gerbers for PCB Fab
+      if: steps.filter.outputs.mobo == 'true' || steps.filter.outputs.config == 'true'
       run: cd feeder/pcb/mobo/export/gerbers && zip -r -j ../feeder_mobo_gerbers.zip *        
 
     - name: upload mobo artifacts
       uses: actions/upload-artifact@v2
-      if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index')
+      if: (steps.filter.outputs.mobo == 'true' || steps.filter.outputs.config == 'true') && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index'))
       with:
         name: feeder_mobo_output
         path: feeder/pcb/mobo/export        
 
     - name: Run indexingWheel KiBot
+      if: steps.filter.outputs.indexingWheel == 'true' || steps.filter.outputs.config == 'true'
       run: cd feeder/pcb/indexingWheel && kibot -c ../../../config-blank.kibot.yaml -d export
 
     - name: Compress indexingWheel Gerbers for PCB Fab
+      if: steps.filter.outputs.indexingWheel == 'true' || steps.filter.outputs.config == 'true'
       run: cd feeder/pcb/indexingWheel/export/gerbers && zip -r -j ../feeder_indexingWheel_gerbers.zip *
 
     - name: upload indexingWheel results
       uses: actions/upload-artifact@v2
-      if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index')
+      if: (steps.filter.outputs.indexingWheel == 'true' || steps.filter.outputs.config == 'true') && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index'))
       with:
         name: feeder_indexingWheel_output
         path: feeder/pcb/indexingWheel/export
 
     - name: Run feederFloor KiBot
+      if: steps.filter.outputs.feederFloor == 'true' || steps.filter.outputs.config == 'true'
       run: cd feeder/pcb/feederFloor && kibot -c ../../../config.kibot.yaml -d export
 
     - name: Compress feederFloor Gerbers for PCB Fab
+      if: 
       run: cd feeder/pcb/feederFloor/export/gerbers && zip -r -j ../feeder_feederFloor_gerbers.zip *
 
     - name: upload feederFloor results
       uses: actions/upload-artifact@v2
-      if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index')
+      if: (steps.filter.outputs.feederFloor == 'true' || steps.filter.outputs.config == 'true') && (github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index'))
       with:
         name: feeder_feederFloor_output
         path: feeder/pcb/feederFloor/export
