@@ -33,6 +33,13 @@ jobs:
       with:
         lfs: true
 
+    - name: Checkout Base Repo
+      uses: actions/checkout@v2
+      if: github.event_name == 'pull_request'
+      with:
+        ref: ${{ github.base_ref }}
+        path: ../base
+
     - name: Update the PCBs with the git hash
       if: github.ref != 'refs/heads/master'
       run: |
@@ -57,8 +64,13 @@ jobs:
     - name: Prepare pnp mobo Gerber Artifact
       run: |
         cd pnp/pcb/mobo/export/gerbers
-        zip -r -j ../pnp_mobo_gerbers.zip *        
+        zip -r -j ../pnp_mobo_gerbers.zip *
 
+    - name: Prepare the PDF diffs
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "base ref: ${{ github.base_ref }}"
+  
     - name: upload pnp artifacts
       uses: actions/upload-artifact@v2
       if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.repository != 'sphawes/index')
